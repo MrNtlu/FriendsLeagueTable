@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">FriendsLeagueTable</string>
+
+    <string-array name="game_types">
+        <item>Select Game Type</item>
+        <item>SPORT</item>
+        <item>FPS</item>
+        <item>MOBA</item>
+    </string-array>
+</resources>
