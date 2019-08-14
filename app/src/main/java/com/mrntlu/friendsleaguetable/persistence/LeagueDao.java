@@ -1,7 +1,6 @@
 package com.mrntlu.friendsleaguetable.persistence;
 
-import android.util.Log;
-
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -13,8 +12,6 @@ import com.mrntlu.friendsleaguetable.models.League;
 import com.mrntlu.friendsleaguetable.models.LeaguePlayers;
 import com.mrntlu.friendsleaguetable.models.Match;
 import com.mrntlu.friendsleaguetable.models.Player;
-import com.mrntlu.friendsleaguetable.utils.Constants;
-
 import java.util.List;
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -78,9 +75,9 @@ public abstract class LeagueDao {
 
         setPlayersInsertOrDelete(-1,match,player1,player2);
 
-        updatePlayer(player1);
-        updatePlayer(player2);
         deleteMatch(match);
+        if (player1!=null) updatePlayer(player1);
+        if (player2!=null) updatePlayer(player2);
     }
 
     @Query("DELETE FROM leagues")
@@ -114,21 +111,22 @@ public abstract class LeagueDao {
     @Update
     public abstract Integer updatePlayer(Player player);
 
-    private void setPlayersInsertOrDelete(int number,Match match,Player player1,Player player2){
-        if (match.getPlayer1_score()>match.getPlayer2_score()){
-            player1.setWin(player1.getWin()+number);
-            player2.setLose(player2.getLose()+number);
-        }else if (match.getPlayer1_score()<match.getPlayer2_score()){
-            player1.setLose(player1.getLose()+number);
-            player2.setWin(player2.getWin()+number);
-        }else{
-            player1.setDraw(player1.getDraw()+number);
-            player2.setDraw(player2.getDraw()+number);
-        }
-        player1.setGoalForOrKill(number>0?player1.getGoalForOrKill()+match.getPlayer1_score():player1.getGoalForOrKill()-match.getPlayer1_score());
-        player1.setGoalAgainstOrDeath(number>0?player1.getGoalAgainstOrDeath()+match.getPlayer2_score():player1.getGoalAgainstOrDeath()-match.getPlayer2_score());
+    private void setPlayersInsertOrDelete(int number, Match match, @Nullable Player player1,@Nullable Player player2){
+        if (player1!=null){
+            if (match.getPlayer1_score()>match.getPlayer2_score()) player1.setWin(player1.getWin()+number);
+            else if (match.getPlayer1_score()<match.getPlayer2_score()) player1.setLose(player1.getLose()+number);
+            else player1.setDraw(player1.getDraw()+number);
 
-        player2.setGoalForOrKill(number>0?player2.getGoalForOrKill()+match.getPlayer2_score():player2.getGoalForOrKill()-match.getPlayer2_score());
-        player2.setGoalAgainstOrDeath(number>0?player2.getGoalAgainstOrDeath()+match.getPlayer1_score():player2.getGoalAgainstOrDeath()-match.getPlayer1_score());
+            player1.setGoalForOrKill(number>0?player1.getGoalForOrKill()+match.getPlayer1_score():player1.getGoalForOrKill()-match.getPlayer1_score());
+            player1.setGoalAgainstOrDeath(number>0?player1.getGoalAgainstOrDeath()+match.getPlayer2_score():player1.getGoalAgainstOrDeath()-match.getPlayer2_score());
+        }
+        if (player2!=null){
+            if (match.getPlayer1_score()>match.getPlayer2_score()) player2.setWin(player2.getWin()+number);
+            else if (match.getPlayer1_score()<match.getPlayer2_score()) player2.setLose(player2.getLose()+number);
+            else player2.setDraw(player2.getDraw()+number);
+
+            player2.setGoalForOrKill(number>0?player2.getGoalForOrKill()+match.getPlayer1_score():player2.getGoalForOrKill()-match.getPlayer1_score());
+            player2.setGoalAgainstOrDeath(number>0?player2.getGoalAgainstOrDeath()+match.getPlayer2_score():player2.getGoalAgainstOrDeath()-match.getPlayer2_score());
+        }
     }
 }

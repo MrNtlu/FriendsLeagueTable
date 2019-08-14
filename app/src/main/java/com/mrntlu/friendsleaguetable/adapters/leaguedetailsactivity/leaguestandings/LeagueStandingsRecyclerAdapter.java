@@ -1,5 +1,6 @@
 package com.mrntlu.friendsleaguetable.adapters.leaguedetailsactivity.leaguestandings;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,10 +86,10 @@ public class LeagueStandingsRecyclerAdapter extends RecyclerView.Adapter<Recycle
         this.league = league;
         this.players=players;
         Collections.sort(players, (player, t1) -> {
-            if (player.getWin()==t1.getWin())
+            if (player.getWin()==t1.getWin() && t1.getDraw()!=player.getDraw())
                 return Integer.compare(t1.getDraw(),player.getDraw());
-            else if (player.getWin()==t1.getWin() && player.getDraw()==player.getDraw())
-                return Integer.compare((t1.getGoalForOrKill()-t1.getGoalAgainstOrDeath()),(player.getGoalForOrKill()-player.getGoalAgainstOrDeath()));
+            else if (player.getWin()==t1.getWin() && t1.getDraw()==player.getDraw())
+                return Integer.compare((t1.getGoalForOrKill() - t1.getGoalAgainstOrDeath()), (player.getGoalForOrKill() - player.getGoalAgainstOrDeath()));
             else
                 return Integer.compare(t1.getWin(),player.getWin());
         });

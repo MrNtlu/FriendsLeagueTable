@@ -12,17 +12,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mrntlu.friendsleaguetable.R;
 import com.mrntlu.friendsleaguetable.adapters.leaguedetailsactivity.leaguematches.LeagueMatchesRecyclerAdapter;
@@ -37,9 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
@@ -195,6 +192,8 @@ public class FragmentLeagueMatches extends DaggerFragment implements RecyclerMat
     private void initRecyclerView() {
         LinearLayoutManager linearLayout = new LinearLayoutManager(getContext());
         leagueMatchesRV.setLayoutManager(linearLayout);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(leagueMatchesRV.getContext(), linearLayout.getOrientation());
+        leagueMatchesRV.addItemDecoration(dividerItemDecoration);
         leagueMatchesRV.setAdapter(adapter);
 
         if (league.getStatus()== League.LeagueStatus.ONGOING) {
@@ -263,7 +262,7 @@ public class FragmentLeagueMatches extends DaggerFragment implements RecyclerMat
 
                             @Override
                             public void onError(Throwable e) {
-
+                                e.printStackTrace();
                             }
                         });
                 dialog.dismiss();

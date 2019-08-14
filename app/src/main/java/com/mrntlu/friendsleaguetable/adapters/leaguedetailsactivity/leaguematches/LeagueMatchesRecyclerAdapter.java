@@ -1,25 +1,19 @@
 package com.mrntlu.friendsleaguetable.adapters.leaguedetailsactivity.leaguematches;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.RequestManager;
 import com.mrntlu.friendsleaguetable.R;
 import com.mrntlu.friendsleaguetable.adapters.LoadingItemViewHolder;
 import com.mrntlu.friendsleaguetable.adapters.NoItemViewHolder;
 import com.mrntlu.friendsleaguetable.models.Match;
-import com.mrntlu.friendsleaguetable.utils.Constants;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -60,10 +54,26 @@ public class LeagueMatchesRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             viewHolder.player1Image.setImageResource(match.getPlayer1().getPlayerImage().getImage());
             viewHolder.player2Image.setImageResource(match.getPlayer2().getPlayerImage().getImage());
 
+            if (match.getPlayer1_score()>match.getPlayer2_score()){
+                viewHolder.winner1Image.setVisibility(View.VISIBLE);
+                viewHolder.winner2Image.setVisibility(View.GONE);
+            }
+            else if (match.getPlayer1_score()<match.getPlayer2_score()){
+                viewHolder.winner1Image.setVisibility(View.GONE);
+                viewHolder.winner2Image.setVisibility(View.VISIBLE);
+            }else{
+                viewHolder.winner1Image.setVisibility(View.GONE);
+                viewHolder.winner2Image.setVisibility(View.GONE);
+            }
+
         }else if (holder instanceof NoItemViewHolder){
             NoItemViewHolder viewHolder=(NoItemViewHolder)holder;
 
             viewHolder.noItemText.setText("No match found!");
+        }else if (holder instanceof LoadingItemViewHolder){
+            LoadingItemViewHolder viewHolder= (LoadingItemViewHolder) holder;
+            viewHolder.progressBar.setVisibility(View.VISIBLE);
+            viewHolder.progressBar.setIndeterminate(true);
         }
     }
 
@@ -78,8 +88,8 @@ public class LeagueMatchesRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public void setMatches(List<Match> matches,int lastItem){
-        isAdapterSet=true;
         this.matches=matches;
+        isAdapterSet=true;
         if (lastItem==0) notifyDataSetChanged();
         else notifyItemRangeInserted(lastItem,matches.size()-lastItem);
 
@@ -118,6 +128,12 @@ public class LeagueMatchesRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
         @BindView(R.id.foregroundCell)
         ConstraintLayout foregroundCell;
+
+        @BindView(R.id.winner1Image)
+        ImageView winner1Image;
+
+        @BindView(R.id.winner2Image)
+        ImageView winner2Image;
 
         MatchViewHolder(@NonNull View itemView) {
             super(itemView);
