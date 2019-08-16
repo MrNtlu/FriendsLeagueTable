@@ -158,7 +158,22 @@ public class FragmentLeagueMatches extends DaggerFragment implements RecyclerMat
         });
 
         matchDialog.findViewById(R.id.saveButton).setOnClickListener((view -> {
-            viewModel.insertNewMatch(new Match(league.getId(), player1, player2, player1Score, player2Score, new Date())).subscribe();
+            viewModel.insertNewMatch(new Match(league.getId(), player1, player2, player1Score, player2Score, new Date())).subscribe(new CompletableObserver() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                }
+            });
             matchDialog.dismiss();
         }));
 
@@ -248,16 +263,15 @@ public class FragmentLeagueMatches extends DaggerFragment implements RecyclerMat
                     if (player.getId().equals(match.getPlayer1().getId())) player1=player;
                     if (player.getId().equals(match.getPlayer2().getId())) player2=player;
                 }
-                if (match!=null) viewModel.deleteMatch(match,player1,player2).observeOn(AndroidSchedulers.mainThread())
+                if (match!=null)
+                    viewModel.deleteMatch(match,player1,player2)
                         .subscribe(new CompletableObserver() {
                             @Override
                             public void onSubscribe(Disposable d) {
-
                             }
 
                             @Override
                             public void onComplete() {
-                                Toast.makeText(getContext(), "Match Deleted.", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override

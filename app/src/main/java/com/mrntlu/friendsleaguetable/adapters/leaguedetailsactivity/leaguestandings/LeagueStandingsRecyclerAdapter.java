@@ -1,25 +1,19 @@
 package com.mrntlu.friendsleaguetable.adapters.leaguedetailsactivity.leaguestandings;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.RequestManager;
 import com.mrntlu.friendsleaguetable.R;
 import com.mrntlu.friendsleaguetable.adapters.LoadingItemViewHolder;
 import com.mrntlu.friendsleaguetable.models.League;
-import com.mrntlu.friendsleaguetable.models.LeaguePlayers;
 import com.mrntlu.friendsleaguetable.models.Player;
-
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -51,7 +45,13 @@ public class LeagueStandingsRecyclerAdapter extends RecyclerView.Adapter<Recycle
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof LeagueStandingsHeaderViewHolder){
+            LeagueStandingsHeaderViewHolder viewHolder= (LeagueStandingsHeaderViewHolder) holder;
 
+            viewHolder.winText.setOnClickListener(view -> Toast.makeText(view.getContext(), "Win", Toast.LENGTH_SHORT).show());
+            viewHolder.drawText.setOnClickListener(view -> Toast.makeText(view.getContext(), "Draw", Toast.LENGTH_SHORT).show());
+            viewHolder.loseText.setOnClickListener(view -> Toast.makeText(view.getContext(), "Lose", Toast.LENGTH_SHORT).show());
+            viewHolder.scoreForText.setOnClickListener(view -> Toast.makeText(view.getContext(), league.getType()== League.LeagueType.SPORT?"Goals For":"Kills", Toast.LENGTH_SHORT).show());
+            viewHolder.scoreAgainstText.setOnClickListener(view -> Toast.makeText(view.getContext(), league.getType()== League.LeagueType.SPORT?"Goals Against":"Deaths", Toast.LENGTH_SHORT).show());
         }else if (holder instanceof LeagueStandingsViewHolder){
             LeagueStandingsViewHolder viewHolder=(LeagueStandingsViewHolder)holder;
             Player player=players.get(position-1);
@@ -133,6 +133,21 @@ public class LeagueStandingsRecyclerAdapter extends RecyclerView.Adapter<Recycle
     }
 
     class LeagueStandingsHeaderViewHolder extends RecyclerView.ViewHolder{
+
+        @BindView(R.id.winText)
+        TextView winText;
+
+        @BindView(R.id.drawText)
+        TextView drawText;
+
+        @BindView(R.id.loseText)
+        TextView loseText;
+
+        @BindView(R.id.scoreForText)
+        TextView scoreForText;
+
+        @BindView(R.id.scoreAgainstText)
+        TextView scoreAgainstText;
 
         LeagueStandingsHeaderViewHolder(@NonNull View itemView) {
             super(itemView);

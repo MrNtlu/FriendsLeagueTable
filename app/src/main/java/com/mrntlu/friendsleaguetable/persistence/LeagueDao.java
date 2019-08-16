@@ -121,12 +121,12 @@ public abstract class LeagueDao {
             player1.setGoalAgainstOrDeath(number>0?player1.getGoalAgainstOrDeath()+match.getPlayer2_score():player1.getGoalAgainstOrDeath()-match.getPlayer2_score());
         }
         if (player2!=null){
-            if (match.getPlayer1_score()>match.getPlayer2_score()) player2.setWin(player2.getWin()+number);
-            else if (match.getPlayer1_score()<match.getPlayer2_score()) player2.setLose(player2.getLose()+number);
+            if (match.getPlayer1_score()>match.getPlayer2_score()) player2.setLose(player2.getLose()+number);
+            else if (match.getPlayer1_score()<match.getPlayer2_score()) player2.setWin(player2.getWin()+number);
             else player2.setDraw(player2.getDraw()+number);
 
-            player2.setGoalForOrKill(number>0?player2.getGoalForOrKill()+match.getPlayer1_score():player2.getGoalForOrKill()-match.getPlayer1_score());
-            player2.setGoalAgainstOrDeath(number>0?player2.getGoalAgainstOrDeath()+match.getPlayer2_score():player2.getGoalAgainstOrDeath()-match.getPlayer2_score());
+            player2.setGoalForOrKill(number>0?player2.getGoalForOrKill()+match.getPlayer2_score():player2.getGoalForOrKill()-match.getPlayer2_score());
+            player2.setGoalAgainstOrDeath(number>0?player2.getGoalAgainstOrDeath()+match.getPlayer1_score():player2.getGoalAgainstOrDeath()-match.getPlayer1_score());
         }
     }
 }
